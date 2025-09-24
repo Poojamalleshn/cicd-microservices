@@ -1,0 +1,15 @@
+services:
+  users:     { build: ./services/users,     container_name: users,     ports: ["3001:3001"], networks: [new-bridge-network] }
+  products:  { build: ./services/products,  container_name: products,  ports: ["3002:3002"], networks: [new-bridge-network] }
+  orders:    { build: ./services/orders,    container_name: orders,    ports: ["3003:3003"], networks: [new-bridge-network] }
+  payments:  { build: ./services/payments,  container_name: payments,  ports: ["3004:3004"], networks: [new-bridge-network] }
+  api-gateway:
+    build: ./services/api-gateway
+    container_name: api-gateway
+    ports: ["8080:8080"]
+    depends_on: [users, products, orders, payments]
+    networks: [new-bridge-network]
+networks:
+  new-bridge-network:
+    external: true
+    name: new-bridge-network

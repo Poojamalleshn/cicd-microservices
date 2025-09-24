@@ -1,0 +1,10 @@
+services:
+  users:     { build: ./services/users,     container_name: users,     ports: ["3001:3001"] }
+  products:  { build: ./services/products,  container_name: products,  ports: ["3002:3002"] }
+  orders:    { build: ./services/orders,    container_name: orders,    ports: ["3003:3003"] }
+  payments:  { build: ./services/payments,  container_name: payments,  ports: ["3004:3004"] }
+  api-gateway:
+    build: ./services/api-gateway
+    container_name: api-gateway
+    ports: ["8080:8080"]
+    depends_on: [users, products, orders, payments]

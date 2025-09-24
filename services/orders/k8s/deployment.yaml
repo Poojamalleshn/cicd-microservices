@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders
+  labels: { app: orders }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: orders } }
+  template:
+    metadata: { labels: { app: orders } }
+    spec:
+      containers:
+      - name: orders
+        image: hiqodenew.jfrog.io/cicd-docker/new-app/orders:v1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3003
+        readinessProbe:
+          httpGet: { path: /health, port: 3003 }
+          initialDelaySeconds: 3
+          periodSeconds: 10
+        livenessProbe:
+          httpGet: { path: /health, port: 3003 }
+          initialDelaySeconds: 10
+          periodSeconds: 20

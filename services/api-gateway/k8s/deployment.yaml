@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+  labels: { app: api-gateway }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: api-gateway } }
+  template:
+    metadata: { labels: { app: api-gateway } }
+    spec:
+      containers:
+      - name: api-gateway
+        image: hiqodenew.jfrog.io/cicd-docker/new-app/api-gateway:v1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet: { path: /health, port: 8080 }
+          initialDelaySeconds: 3
+          periodSeconds: 10
+        livenessProbe:
+          httpGet: { path: /health, port: 8080 }
+          initialDelaySeconds: 10
+          periodSeconds: 20

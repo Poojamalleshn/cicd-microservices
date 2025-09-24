@@ -1,0 +1,25 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CI/CD Demo — Microservices UI</title>
+<style>body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:20px}
+h1{margin-bottom:.25rem}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.card{border:1px solid #ddd;border-radius:12px;padding:16px;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+code,pre{background:#f7f7f7;padding:2px 6px;border-radius:6px}.muted{color:#666;font-size:.9rem}button{padding:8px 12px;border-radius:8px;border:1px solid #ccc;cursor:pointer}
+input{padding:8px;border:1px solid #ccc;border-radius:8px;width:100%}.row{display:flex;gap:8px}.err{color:#b00020}</style></head>
+<body><h1>CI/CD Demo — Microservices UI</h1><p class=muted>Gateway base: <code>/</code> • Health: <code>/health</code> • API: <code>/api/...</code></p>
+<div class=grid>
+<div class=card><h3>Users</h3><button onclick="loadUsers()">Reload</button><ul id=users></ul></div>
+<div class=card><h3>Products</h3><button onclick="loadProducts()">Reload</button><ul id=products></ul></div>
+<div class=card><h3>Orders</h3><button onclick="loadOrders()">Reload</button><ul id=orders></ul><hr><h4>Create Order</h4>
+<div class=row><input id=userId placeholder="User ID (e.g. 1)"><input id=productId placeholder="Product ID (e.g. 101)"></div><br>
+<button onclick="createOrder()">Place Order</button><pre id=createOrderResult class=muted></pre></div>
+<div class=card><h3>Payments</h3><button onclick="loadPayments()">Reload</button><ul id=payments></ul></div></div>
+<script>
+async function req(path, opts){const r=await fetch(path,opts||{});const t=await r.text();try{const j=JSON.parse(t);if(!r.ok)throw new Error(j.error||t);return j;}catch(e){throw new Error(`HTTP ${r.status}${t?` — ${t}`:''}`)}}
+async function loadUsers(){const el=document.getElementById('users');el.innerHTML='Loading...';try{const d=await req('/api/users');el.innerHTML=d.map(u=>`<li>#${u.id} — ${u.name} &lt;${u.email}&gt;</li>`).join('')}catch(e){el.innerHTML=`<li class=err>${e.message}</li>`}}
+async function loadProducts(){const el=document.getElementById('products');el.innerHTML='Loading...';try{const d=await req('/api/products');el.innerHTML=d.map(p=>`<li>#${p.id} — ${p.name} (₹${p.price})</li>`).join('')}catch(e){el.innerHTML=`<li class=err>${e.message}</li>`}}
+async function loadOrders(){const el=document.getElementById('orders');el.innerHTML='Loading...';try{const d=await req('/api/orders');el.innerHTML=d.map(o=>`<li>#${o.id} — user ${o.userId} → product ${o.productId} — <b>${o.status}</b></li>`).join('')}catch(e){el.innerHTML=`<li class=err>${e.message}</li>`}}
+async function loadPayments(){const el=document.getElementById('payments');el.innerHTML='Loading...';try{const d=await req('/api/payments');el.innerHTML=d.map(p=>`<li>#${p.id} — order ${p.orderId} — ₹${p.amount} — <b>${p.status}</b></li>`).join('')}catch(e){el.innerHTML=`<li class=err>${e.message}</li>`}}
+async function createOrder(){const userId=parseInt(document.getElementById('userId').value,10);const productId=parseInt(document.getElementById('productId').value,10);const out=document.getElementById('createOrderResult');out.textContent='Submitting...';
+try{const d=await req('/api/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId,productId})});out.textContent=JSON.stringify(d,null,2);loadOrders()}catch(e){out.textContent='Error: '+e.message}}</script>
+</body></html>
