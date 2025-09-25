@@ -13,9 +13,9 @@
     - name: pull an image
       shell: docker pull hiqodenew.jfrog.io/cicd-docker/microservicebasedapp/{{ microservice }}:v1.0.{{ build_number }}
 
-    #- name: remove container
-    #  shell: docker rm -f {{ microservice }}
+    - name: remove container
+      shell: docker rm -f {{ microservice }}
         
     - name: create a application container
-      shell: docker run -id --name {{ microservice }} -p {{ port }}:{{ port }} hiqodenew.jfrog.io/cicd-docker/microservicebasedapp/{{ microservice }}:v1.0.{{ build_number }} 
+      shell: docker run -id --name {{ microservice }} -p {{ port }}:{{ port }} --network new-bridge-network hiqodenew.jfrog.io/cicd-docker/microservicebasedapp/{{ microservice }}:v1.0.{{ build_number }} 
  
