@@ -1,0 +1,21 @@
+---
+- hosts: websever
+  become: yes
+  vars:
+    build_number: '{{ BUILD_NUMBER }}'
+    microservice: '{{ microservice }}'
+    port: '{{ port }}'
+  tasks:
+      
+    - name: login to jfrog
+      shell: docker login -u siddeshg672@gmail.com -p Siddesh@123456 hiqodenew.jfrog.io  
+    
+    - name: pull an image
+      shell: docker pull hiqodenew.jfrog.io/cicd-docker/microservicebasedapp/{{ microservice }}:v1.0.{{ build_number }}
+
+    #- name: remove container
+    #  shell: docker rm -f {{ microservice }}
+        
+    - name: create a application container
+      shell: docker run -id --name {{ microservice }} -p {{ port }}:{{ port }} hiqodenew.jfrog.io/cicd-docker/microservicebasedapp/{{ microservice }}:v1.0.{{ build_number }} 
+ 
