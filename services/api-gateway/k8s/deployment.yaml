@@ -11,8 +11,8 @@ spec:
     spec:
       containers:
       - name: api-gateway
-        image: hiqodenew.jfrog.io/cicd-docker/new-app/api-gateway:v1
-        #image: image_name
+        # image: hiqodenew.jfrog.io/cicd-docker/new-app/api-gateway:v1
+        image: image_name
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
