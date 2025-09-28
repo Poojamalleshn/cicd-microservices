@@ -15,6 +15,11 @@
 
    # - name: remove container
      # shell: docker rm -f {{ microservice }}
+     
+     - name: create docker network if not exists
+       command: docker network create new-bridge-network
+       ignore_errors: yes
+
         
     - name: create a application container
       shell: docker run -id --name {{ microservice }} -p {{ port }}:{{ port }} --network new-bridge-network trial2q496n.jfrog.io/cicd-docker/microservicebasedapp/{{ microservice }}:v1.0.{{ build_number }} 
