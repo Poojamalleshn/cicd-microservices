@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
       - name: users
-        image: hiqodenew.jfrog.io/cicd-docker/new-app/users:v1
+        image: trial2q496n.jfrog.io/cicd-docker/new-app/users:v1
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3001
