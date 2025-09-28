@@ -8,10 +8,10 @@
   tasks:
       
     - name: login to jfrog
-      shell: docker login -u siddeshg672@gmail.com -p Siddesh@123456 hiqodenew.jfrog.io  
+      shell: docker login -u Poojamn110729@gmail.com -p Admin@123456 trial2q496n.jfrog.io 
     
     - name: pull an image
-      shell: docker pull hiqodenew.jfrog.io/cicd-docker/microservicebasedapp/{{ microservice }}:v1.0.{{ build_number }}
+      shell: docker pull trial2q496n.jfrog.io/cicd-docker/microservicebasedapp/{{ microservice }}:v1.0.{{ build_number }}
 
     - name: remove container
       shell: docker rm -f {{ microservice }}
