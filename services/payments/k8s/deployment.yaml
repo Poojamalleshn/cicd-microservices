@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
       - name: payments
-        image: hiqodenew.jfrog.io/cicd-docker/new-app/payments:v1
+        image: trial2q496n.jfrog.io/cicd-docker/new-app/payments:v1
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3004
