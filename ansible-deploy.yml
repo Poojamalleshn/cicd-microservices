@@ -2,20 +2,24 @@
 - hosts: websever
   become: yes
   vars:
-    build_number: '{{ BUILD_NUMBER }}'
-    microservice: '{{ microservice }}'
-    port: '{{ port }}'
-  tasks:
-      
-    - name: login to jfrog
-      shell: docker login -u poojamn110729gmail.com -p Admin@123456 trial2q496n.jfrog.io  
-    
-    - name: pull an image
-      shell: docker pull trial2q496n.jfrog.io/cicd-docker-1/microservicebasedapp/{{ microservice }}:v1.0.{{ build_number }}
+    build_number: "{{ BUILD_NUMBER }}"
+    microservice: "{{ microservice }}"
+    port: "{{ port }}"
 
-    - name: remove container
+  tasks:
+    - name: login to jfrog
+      shell: docker login -u poojamn110729@gmail.com -p Admin@123456 trial2q496n.jfrog.io 
+
+    - name: pull an image
+      shell: docker pull trial2q496n.jfrog.io/cicd-docker/microservicebasedapp/{{ microservice }}:v1.0.{{ build_number }}
+
+    - name: remove old container (if exists)
       shell: docker rm -f {{ microservice }}
-        
-    - name: create a application container
-      shell: docker run -id --name {{ microservice }} -p {{ port }}:{{ port }} --network new-bridge-network trial2q496n.jfrog.io/cicd-docker-1/microservicebasedapp/{{ microservice }}:v1.0.{{ build_number }} 
- 
+      ignore_errors: yes
+
+    - name: create docker network if not exists
+      command: docker network create new-bridge-network
+      ignore_errors: yes
+
+    - name: create application container
+      shell: docker run -id --name {{ microservice }} -p {{ port }}:{{ port }} --network new-bridge-network trial2q496n.jfrog.io/cicd-docker/microservicebasedapp/{{ microservice }}:v1.0.{{ build_number }}
